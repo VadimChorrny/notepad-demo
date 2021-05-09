@@ -16,7 +16,7 @@ namespace notepad_v2._0
         public Form1()
         {
             InitializeComponent();
-            string fileName = openFileDialog1.FileName.ToString();
+            string fileName = openFileDialog1.FileName;
             toolStripStatusLabel1.Text = Path.GetFileNameWithoutExtension(fileName);
             toolStripStatusLabel2.Text = Cursor.Position.ToString();
 
@@ -26,10 +26,8 @@ namespace notepad_v2._0
         {
             var fileContent = string.Empty;
             var filePath = string.Empty;
-
-            openFileDialog1.InitialDirectory = "c:\\";
-            openFileDialog1.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
-            openFileDialog1.FilterIndex = 2;
+            openFileDialog1.Filter = "Txt files(*.txt)|*.txt| HTML files(*.html)|*html| Csharp files(*.cs)|*.cs| Rich files(*.rtf)|*.rtf|All files(*.*)|*.*||"; // name filter|some filter
+            openFileDialog1.FilterIndex = 1;
             openFileDialog1.RestoreDirectory = true;
 
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
@@ -55,19 +53,23 @@ namespace notepad_v2._0
 
         private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            string file = "";
-            saveFileDialog1.Filter = "(*.txt; *.cs; *html; *rtf) | *.txt; *.cs; *.html; *rtg";
+            saveFileDialog1.Filter = "Txt files(*.txt)|*.txt| HTML files(*.html)|*html| Csharp files(*.cs)|*.cs| Rich files(*.rtf)|*.rtf|All files(*.*)|*.*||"; // name filter|some filter
             if (saveFileDialog1.ShowDialog() == DialogResult.OK)
-                file = saveFileDialog1.FileName;
-            else
-                return;
-            RichTextBoxStreamType stream_type;
-            if (saveFileDialog1.FilterIndex == 2) // here need fix
-                stream_type = RichTextBoxStreamType.PlainText;
-            else
-                stream_type = RichTextBoxStreamType.RichText;
-            richTextBox1.SaveFile(file, stream_type);
-            MessageBox.Show("File Saved");
+            {
+                string path = saveFileDialog1.FileName;
+                switch (Path.GetExtension(path))
+                {
+                    case ".txt":
+                        File.WriteAllText(path, richTextBox1.Text);
+                        break;
+
+                    case ".rtf":
+                        richTextBox1.SaveFile(path, RichTextBoxStreamType.RichText);
+                        break;
+                    default:
+                        break;
+                }
+            }
 
         }
 
@@ -168,6 +170,11 @@ namespace notepad_v2._0
                 richTextBox1.SelectionFont = fontDialog1.Font;
                 richTextBox1.SelectionColor = fontDialog1.Color;
             }
+        }
+
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string path = "https://chorrnyinc.com";
         }
     }
 }
