@@ -165,8 +165,8 @@ namespace notepad_v2._0
             fontDialog1.Font = richTextBox1.Font;
             if (fontDialog1.ShowDialog() != DialogResult.Cancel)
             {
-                richTextBox1.Font = fontDialog1.Font;
-                richTextBox1.ForeColor = fontDialog1.Color;
+                richTextBox1.SelectionFont = fontDialog1.Font;
+                richTextBox1.SelectionColor = fontDialog1.Color;
             }
         }
     }
